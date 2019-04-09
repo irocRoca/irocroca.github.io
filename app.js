@@ -172,7 +172,6 @@ const updateRec = data => {
     .attr("height", d => recHeight - yScale(d.total))
     .attr("y", d => yScale(d.total));
 
-  recGraph.selectAll("rect").on("mouseover", handleBarHover);
   /// Axis groups
   xAxisGroup.call(xAxis);
   yAxisGroup.call(yAxis);
@@ -251,32 +250,6 @@ const fileComplete = data => {
   updatePie(hub);
 };
 
-// let data = [];
-// /// Get data from database
-// db.collection("hub").onSnapshot(res => {
-//   res.docChanges().forEach(change => {
-//     console.log(change);
-//     const doc = { ...change.doc.data(), id: change.doc.id };
-
-//     switch (change.type) {
-//       case "added":
-//         data.push(doc);
-//         break;
-//       case "modified":
-//         const index = data.findIndex(item => item.id === doc.id);
-//         data[index] = doc;
-//         break;
-//       case "removed":
-//         data = data.filter(item => item.id !== doc.id);
-//         break;
-//       default:
-//         break;
-//     }
-//   });
-
-//   update(data);
-// });
-
 const widthTween = d => {
   let i = d3.interpolate(0, xScale.bandwidth());
   return t => i(t);
@@ -329,8 +302,6 @@ function handleMouseMove(d, i, n) {
     .style("left", d3.event.pageX + 10 + "px")
     .style("top", d3.event.pageY + 10 + "px");
 }
-
-const handleBarHover = d => {};
 
 const handleClick = (d, i, n) => {
   updateRec(d);
