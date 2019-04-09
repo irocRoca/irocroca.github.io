@@ -1,15 +1,3 @@
-const config = {
-  apiKey: "AIzaSyDGA-zfNYEKJWOQnR2PeVXzQLki9Yn_Aho",
-  authDomain: "dashboard-524f0.firebaseapp.com",
-  databaseURL: "https://dashboard-524f0.firebaseio.com",
-  projectId: "dashboard-524f0",
-  storageBucket: "dashboard-524f0.appspot.com",
-  messagingSenderId: "1009854633186"
-};
-firebase.initializeApp(config);
-
-const db = firebase.firestore();
-
 const dims = { width: 550, height: 400, radius: 150 };
 const cirDims = { x: dims.width / 2, y: dims.height / 2 };
 const recMargin = { top: 50, right: 25, bottom: 50, left: 50 };
