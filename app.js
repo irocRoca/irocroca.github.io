@@ -5,28 +5,29 @@ const recWidth = dims.width - recMargin.left - recMargin.right;
 const recHeight = dims.height - recMargin.top - recMargin.bottom;
 
 const color = d3.scaleOrdinal(d3["schemeSet3"]); // or an array of colors
+const barColor = d3.scaleOrdinal(["schemeCategory20"]);
 
 // Circle Svg
 const svg = d3
   .select("#canvas") // Create Svg
   .append("svg")
-  .attr("width", dims.width + 100)
-  .attr("height", dims.height)
-  .style("background-color", "#E0E0E2");
+  .attr("width", dims.width)
+  .attr("height", dims.height);
+//.style("background-color", "#E0E0E2");
 
 // Bar Svg
 const recSvg = d3
-  .select("#canvas") // Create Svg
+  .select("#rect") // Create Svg
   .append("svg")
   .attr("width", dims.width)
-  .attr("height", dims.height)
-  .style("background-color", "#E0E0E2");
+  .attr("height", dims.height);
+//.style("background-color", "#E0E0E2");
 
 // Tooltip for Circle
 const tip = d3
   .select("#canvas")
   .append("div")
-  .attr("class", "toolTip")
+  .attr("class", "hovertip")
   .style("display", "none");
 
 // RecGroup
@@ -70,7 +71,7 @@ const graph = svg
 // Circle Legend
 const legendGroup = svg
   .append("g")
-  .attr("transform", `translate(${dims.width - 60}, 100)`);
+  .attr("transform", `translate(${dims.width - 80}, 100)`);
 
 const legend = d3
   .legendColor()
@@ -139,8 +140,9 @@ const updatePie = data => {
 const updateRec = data => {
   let newData = data.data;
   // Set domain for colors
+  //barColor.domain(...newData.ataCorrelation.map(d => d.ata));
   const max = Math.max(...newData.ataCorrelation.map(item => item.total));
-  console.log(max);
+
   yScale.domain([0, max]);
   xScale.domain(newData.ataCorrelation.map(item => item.ata));
 
@@ -148,14 +150,14 @@ const updateRec = data => {
 
   /// Join data to bars
   const rects = recGraph.selectAll("rect").data(newData.ataCorrelation);
-  console.log(rects);
+
   // Remove extra bars
   rects.exit().remove();
 
   //Rects currently in dom
   rects
     .attr("width", xScale.bandwidth)
-    //.attr("fill", d => color(d.campus))
+    .attr("fill", "blue")
     .attr("x", d => xScale(d.ata));
 
   rects
@@ -172,23 +174,92 @@ const updateRec = data => {
     .attr("height", d => recHeight - yScale(d.total))
     .attr("y", d => yScale(d.total));
 
+  recGraph.selectAll("rect").on("click", tableHead);
+
   /// Axis groups
   xAxisGroup.call(xAxis);
   yAxisGroup.call(yAxis);
 };
 
-// create Table
-const tableHead = d3
-  .select("#canvas")
+// CREATE TABLE
+const tableColumns = [
+  "Campus",
+  "Ata",
+  "Mepn",
+  "Station",
+  "Ec",
+  "Alloc",
+  "Qoh",
+  "Qit",
+  "Oqas",
+  "Iqas",
+  "Qub",
+  "Qri"
+];
+
+// const columns = Object.keys(d[0]);
+
+const table = d3
+  .select("#list")
   .append("table")
-  .attr("class", "ui very basic table")
-  .append("thred")
-  .append("tr");
-tableHead.append("th").text("State");
-tableHead
+  .attr("class", "table table-striped mt-5")
+  .style("display", "none");
+
+const thead = table.append("thead");
+const tbody = table.append("tbody");
+
+thead
+  .append("tr")
+  .selectAll("th")
+  .data(tableColumns)
+  .enter()
   .append("th")
-  .text("Rec")
-  .append("tbody");
+  .attr("class", "col")
+  .text(d => d);
+
+///////////////////////////////////////////////////////////////////////////////////////
+// UPDATED TABLE
+const tableHead = data => {
+  console.log(data);
+  let list = data.list;
+
+  const columns = Object.keys(list[0]); // Dont need
+
+  const table = d3
+    .select("#list")
+    .select("table")
+    .style("display", "block");
+  const thead = table.select("thead");
+  const tbody = table.select("tbody");
+
+  let rows = tbody.selectAll("tr").data(list);
+
+  rows.exit().remove();
+
+  rows
+    .enter()
+    .append("tr")
+    .data(list);
+
+  let cells = rows.selectAll("td").data(function(row) {
+    return columns.map(function(column) {
+      return { column: column, value: row[column] };
+    });
+  });
+
+  cells.exit().remove();
+
+  cells.html(function(d) {
+    return d.value;
+  });
+
+  cells
+    .enter()
+    .append("td")
+    .html(function(d) {
+      return d.value;
+    });
+};
 
 ///////////////////////////////////////////////////
 
@@ -196,7 +267,6 @@ const file = document.getElementById("file");
 
 function handleFiles(e) {
   let parseFile = e[0];
-
   Papa.parse(parseFile, {
     header: true,
     dynamicTyping: true,
@@ -223,15 +293,28 @@ const fileComplete = data => {
       return csvList.Campus == item.campus;
     });
     let ataCodes = [...new Set(total.map(item => item.ATA))];
-    // ataNum = ataTotal then find all ataNum in array
-    // and find length
-    // {ataNum: total of ata nums}
-    // {ataTotal:  }
 
     let ata = [];
+    let listData = [];
     ataCodes.map(code => {
       let sum = total.filter(listItem => listItem.ATA == code);
-      let obj = { ata: code, total: sum.length };
+      let newSum = sum.map(asd => {
+        return {
+          campus: asd.Campus,
+          ata: asd.ATA,
+          mepn: asd.MEPN,
+          station: asd.Station,
+          ec: asd.EC,
+          alloc: asd.CURR_ALLOC,
+          qoh: asd.QOH,
+          qit: asd.QIT,
+          oqas: asd.OQAS,
+          iqas: asd.IQAS,
+          qub: asd.QUB,
+          qri: asd.QRI
+        };
+      });
+      let obj = { ata: code, total: sum.length, list: newSum };
       ata.push(obj);
     });
 
@@ -246,7 +329,9 @@ const fileComplete = data => {
     item.ataCorrelation = ata;
   });
 
-  console.log(hub);
+  let backdrop = (document.getElementById("backdrop").style.display = "none");
+  console.log(backdrop);
+
   updatePie(hub);
 };
 
@@ -281,11 +366,11 @@ function arcTweenUpdate(d) {
 
 const handleMouseOver = (d, i, n) => {
   d3.select(n[i])
+    .style("cursor", "pointer")
     .transition("hoverFill")
     .duration(200)
     .attr("fill", "#C1CAD6");
   tip.style("display", "block");
-  updateRec(d);
 };
 
 const handleMouseOut = (d, i, n) => {

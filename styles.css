@@ -1,0 +1,125 @@
+.navbar {
+  background-color: #4589fe;
+  color: white;
+  text-transform: uppercase;
+}
+
+body {
+  background-color: #fbfbfb;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 5px 10px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#canvas,
+#rect {
+  display: inline-block;
+}
+
+table {
+  display: table;
+}
+
+.table {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.col {
+  width: auto;
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+.hovertip {
+  position: absolute;
+  padding: 5px 10px;
+  font: 12px sans-serif;
+  background: lightblue;
+  border: 0px;
+  border-radius: 8px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.modal-dialog {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  margin-top: 5rem;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-title {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.modal-body {
+  text-align: center;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+#backdrop {
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+  background: #4589fe;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card {
+  max-width: 400px;
+  margin: 4rem auto;
+  height: 250px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.title {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadBtn {
+  cursor: pointer;
+  background: red;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: white;
+  margin: 2rem auto;
+  padding: 0.2rem 2rem;
+  border-radius: 10px;
+}
+
+.trialFile {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.linkDemo:hover {
+  text-decoration: none;
+  transition: color ease-in-out 350ms;
+  color: red;
+}
