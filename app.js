@@ -266,6 +266,14 @@ const tableHead = data => {
 const file = document.getElementById("file");
 
 function handleFiles(e) {
+  const loader = (document.getElementsByClassName("load")[0].style.display =
+    "block");
+  const label = (document.getElementsByClassName("uploadBtn")[0].style.display =
+    "none");
+  const demoLink = (document.getElementsByClassName(
+    "linkDemo"
+  )[0].style.display = "none");
+
   let parseFile = e[0];
   Papa.parse(parseFile, {
     header: true,
